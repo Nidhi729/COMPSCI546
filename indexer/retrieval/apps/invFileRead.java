@@ -25,17 +25,17 @@ public class invFileRead {
 		int off = 0; 
 		while (off < buffLength) {
 			int docId = fromByteArray(Arrays.copyOfRange(buffer, off, off + 4));
-			System.out.println(docId);
+			//System.out.println(docId);
 			off += 4;
 			int tf = fromByteArray(Arrays.copyOfRange(buffer, off, off + 4));
 			Integer[] pos = new Integer[tf];
 			for (int i = 0; i < tf; i++) {
 				pos[i] = fromByteArray(Arrays.copyOfRange(buffer, off, off + 4));
-				System.out.println(pos[i]);
+				//System.out.println(pos[i]);
 				off += 4;
 				if(off>=buffLength) break;
 				}
-			System.out.println("-----");
+			//System.out.println("-----");
 
 		}
 		reader.close();

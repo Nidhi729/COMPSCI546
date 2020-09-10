@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Posting {
 	
-	private List<Integer> positions;
+	public List<Integer> positions;
 	private Integer docID;
 	
 	/**
@@ -21,6 +21,14 @@ public class Posting {
 		this.positions = new ArrayList<Integer>();
 		this.positions.add(pos);
 		this.docID = docID;
+	}
+	public Posting(int docID, List<Integer> pos) {
+		this.docID = docID;
+		this.positions = new ArrayList<Integer>();
+		//this.positions = positions;
+		for(int i=0;i<pos.size();i++) {
+				this.positions.add(pos.get(i));
+		}
 	}
 	/**
 	 * Adding each positions to its corresponding list

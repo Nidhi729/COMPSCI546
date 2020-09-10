@@ -44,6 +44,7 @@ public class IndexBuilder {
 				JSONObject scene = (JSONObject) scenes.get(idx);
 				int docID = idx+1;
 				String sceneID = (String) scene.get("sceneId");
+//				System.out.println(sceneID);
 				sceneIdMap.put(docID,sceneID);
 				String playID = (String) scene.get("playId");
 				playIdMap.put(docID,playID);
@@ -96,6 +97,7 @@ public class IndexBuilder {
 			
 			for(Map.Entry<String, PostingList> entry:invertedLists.entrySet()) {
 				String term = entry.getKey();
+				
 				PostingList postings = entry.getValue();
 				int docTermFreq = postings.docCount();
 				int collectionTermFreq = postings.termFreq();
@@ -106,15 +108,15 @@ public class IndexBuilder {
 				//For compression
 				if(toBeCompressed) {
 					
-					//Delta encode each of the posting
-					for(int i=0;i<postings.postings.size();i++) {
-						Posting post = postings.postings.get(i);
-						post.deltaEncodePositions();
-					}
-					posts = postings.toIntegerArray();
-					byteBuffer = ByteBuffer.allocate(posts.length*8);
-					
-					//vByte Encode
+//					//Delta encode each of the posting
+//					for(int i=0;i<postings.postings.size();i++) {
+//						Posting post = postings.postings.get(i);
+//						post.deltaEncodePositions();
+//					}
+//					posts = postings.toIntegerArray();
+//					byteBuffer = ByteBuffer.allocate(posts.length*8);
+//					
+//					//vByte Encode
 					Compression comp = new Compression();
 					comp.VByteEncode(posts,byteBuffer);
 				}
@@ -134,12 +136,13 @@ public class IndexBuilder {
 			lookupWriter.close();
 		} catch(IOException e) {
 			e.printStackTrace();
+			System.out.println("Here");
 		}	
 	}
 	public void buildIndex(String source, boolean compress) {
 //		this.compression = compress?Compressors.VBYTE:Compressors.EMPTY;
 		this.toBeCompressed = compress;
-		String invFile = compress?"invListCompressed":"invList";
+		String invFile = compress?"invFileCompressed":"invFile";
 		parseFile(source);
 		saveStringMap("sceneId.txt",sceneIdMap);
 		saveStringMap("playIds.txt",playIdMap);

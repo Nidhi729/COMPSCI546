@@ -5,12 +5,17 @@ import java.util.List;
 
 public class PostingList {
 	
-	List<Posting> postings;
-	private int postingsIndex;
+	public List<Posting> postings;
+	public int postingsIndex;
 	
 	public PostingList() {
 		postings = new ArrayList<Posting>();
 		postingsIndex = -1;
+	}
+	public PostingList(int index, List<Posting> postings) {
+		this.postings = postings;
+		this.postingsIndex = index;
+		
 	}
 	
 	public void startIteration() {
@@ -96,7 +101,7 @@ public class PostingList {
 			buffer.append(positions.length).append(" [");
 			
 			for(int i:positions) {
-				buffer.append(" ");
+				buffer.append(i).append(" ");
 			}
 			buffer.append(" ]} ");
 			skipTo(doc+1);
