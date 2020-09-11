@@ -15,14 +15,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import utilities.*;
 import index.Compression;
 public class IndexBuilder {
 	private Map<Integer,String> sceneIdMap;
 	private Map<Integer,String> playIdMap;
 	private Map<String,PostingList> invertedLists;
 	private Map<Integer,Integer> docLengths;
-	//private Compressors compression;
 	private boolean toBeCompressed;
 	
 	public IndexBuilder() {
@@ -34,17 +32,17 @@ public class IndexBuilder {
 	private void parseFile(String filename) {
 		JSONParser parser = new JSONParser();
 		try {
-			File testFile = new File("");
-		    //String currentPath = testFile.getAbsolutePath();
-		    //System.out.println("current path is: " + currentPath);
-		    //Path filePath = Paths.get(currentPath, filename);
+			File testFile = new File("");	
+			/*
+		    String currentPath = testFile.getAbsolutePath();
+		    Path filePath = Paths.get(currentPath, filename);
+		     */ 
 			JSONObject jsonObj = (JSONObject) parser.parse(new FileReader(filename));
 			JSONArray scenes = (JSONArray) jsonObj.get("corpus");
 			for(int idx = 0;idx<scenes.size();idx++) {
 				JSONObject scene = (JSONObject) scenes.get(idx);
 				int docID = idx+1;
 				String sceneID = (String) scene.get("sceneId");
-//				System.out.println(sceneID);
 				sceneIdMap.put(docID,sceneID);
 				String playID = (String) scene.get("playId");
 				playIdMap.put(docID,playID);
@@ -93,30 +91,19 @@ public class IndexBuilder {
 		try {
 			PrintWriter lookupWriter = new PrintWriter(lookupname, "UTF-8");
 			RandomAccessFile invListWriter = new RandomAccessFile(invListname, "rw");
-			//Compression comp = CompressionFactory.getCompressor(compression);
 			
 			for(Map.Entry<String, PostingList> entry:invertedLists.entrySet()) {
-				String term = entry.getKey();
 				
+				String term = entry.getKey();
 				PostingList postings = entry.getValue();
 				int docTermFreq = postings.docCount();
 				int collectionTermFreq = postings.termFreq();
-				//No compression
+
 				Integer[] posts = postings.toIntegerArray();
 				ByteBuffer byteBuffer = ByteBuffer.allocate(posts.length*8);
-				
-				//For compression
+
 				if(toBeCompressed) {
-					
-//					//Delta encode each of the posting
-//					for(int i=0;i<postings.postings.size();i++) {
-//						Posting post = postings.postings.get(i);
-//						post.deltaEncodePositions();
-//					}
-//					posts = postings.toIntegerArray();
-//					byteBuffer = ByteBuffer.allocate(posts.length*8);
-//					
-//					//vByte Encode
+					/* VByteEncode: Call Delta Encode internally*/
 					Compression comp = new Compression();
 					comp.VByteEncode(posts,byteBuffer);
 				}
@@ -128,7 +115,6 @@ public class IndexBuilder {
 				byte [] array =  byteBuffer.array();
 				invListWriter.write(array,0,byteBuffer.position());
 				long bytesWritten = invListWriter.getFilePointer()-offset;
-				//System.out.println();
 				lookupWriter.println(term+" "+offset+" "+bytesWritten+" "+docTermFreq+" "+collectionTermFreq);
 				offset = invListWriter.getFilePointer();				
 			}
@@ -136,11 +122,10 @@ public class IndexBuilder {
 			lookupWriter.close();
 		} catch(IOException e) {
 			e.printStackTrace();
-			System.out.println("Here");
+			//System.out.println("In Catch");
 		}	
 	}
 	public void buildIndex(String source, boolean compress) {
-//		this.compression = compress?Compressors.VBYTE:Compressors.EMPTY;
 		this.toBeCompressed = compress;
 		String invFile = compress?"invFileCompressed":"invFile";
 		parseFile(source);
@@ -149,10 +134,5 @@ public class IndexBuilder {
 		saveDocLengths("docLength.txt");
 		saveInvertedLists("lookup.txt",invFile);
 	}
-	
-		
-	
-	
-	
 
 }

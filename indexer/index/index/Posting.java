@@ -69,29 +69,4 @@ public class Posting {
 	public Integer getDocId() {
 		return this.docID;
 	}
-	/**
-	 * Encode posting 
-	 */
-	  public void deltaEncodePositions(){
-		  
-		  int idx = this.positions.size()-1;
-		  while(idx>=1) {
-		      this.positions.set(idx, this.positions.get(idx) - this.positions.get(idx-1));
-		      idx--;
-		  }
-	  }
-		  
-	  /**
-	   * Decode posting
-	   */
-		  public void deltaDecodePositions(){
-			  int idx = this.positions.size()-1;
-			  while(idx>=1) {
-			      this.positions.set(idx, this.positions.get(idx) + this.positions.get(idx-1));
-			      idx--;
-			  }
-		  }
-	
-	
-
 }

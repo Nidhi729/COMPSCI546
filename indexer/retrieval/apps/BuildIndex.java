@@ -11,51 +11,56 @@ import index.*;
 public class BuildIndex {
   public static void main(String[] args) throws IOException {
 	  
-/**
 	  //Input file and compression instruction
-	  String sourcefile = args[0];
+	  String sourceFile = args[0];
 	  boolean compress = Boolean.parseBoolean(args[1]);
-	  **/
-	  boolean compress = true;
-	  //Index Creation (all files saved)
+ 
+	  System.out.println("Data source: " + sourceFile);
+	  System.out.println("Compression: " + compress);
+
+	  /* Index Creation*/
 	  IndexBuilder builder = new IndexBuilder();
-	  String path = "shakespeare-scenes.json";
-
-	  builder.buildIndex(path, compress);
-
-	  /*
+	  builder.buildIndex(sourceFile, compress);
+	  System.out.println("** Index Created **");
+  
+	  /* 7-word Query File Generation */
 	  SelectTerms generate = new SelectTerms();
 	  generate.generateQuery(7,compress);
-	  System.out.println("Completed");
+	  System.out.println("7 Word Query File Generated");
 	  
+	  /* 14-Word Query File Generation */
 	  ComputeDice compute = new ComputeDice();
 	  compute.generateQuery("queryterms.txt",compress);
-	  */
+	  System.out.println("14 Word Query File Generated");
 	  
+	  /* Retrieval Time Computation*/
 	  ComputeQueryTime timer = new ComputeQueryTime();
-	  timer.computeTime("queryterms.txt", "diced-queries.txt", 5, compress);
-  
+	  timer.computeTime("queryterms.txt", "diced-queries.txt", 5, compress);	
 	  
-//	  InvertedIndex index = new InvertedIndex(compress);
-//	  index.loadLookup();
-//	  System.out.println(index.getDocCount());
-//	  PostingList post = (index.fetchPosting("incomprehensible"));
-//	  System.out.println(post.toString());
-//	  PostingList post1 = (index.fetchPosting("lie"));
-//	  System.out.println(post1.toString());
+	  /* Statistics */
+	  InvertedIndex index = new InvertedIndex(compress);
+	  index.loadLookup();
+	  index.computeStats();
 	  
-//	  invFileRead inv = new invFileRead("invList");
-//	  inv.readFile((long) 6064772, 12);
-//	  
+	  /** The following code is to check retrieval for "!compress" case (i.e. NOT(compress)) for the same query file 
+	   * Builds the index with !compress as the command
+	   * Generates 14-term query file using the old query file
+	   * Computes retrieval time for comparison   
+	   */
+	  IndexBuilder nbuilder = new IndexBuilder();
+	  nbuilder.buildIndex(sourceFile, !compress);
+	  System.out.println("** New Index Created **");
 	  
-	  //Retrieval Call
-//	  InvertedIndex index = new InvertedIndex("sceneId.txt","playIds.txt","docLength.txt","lookup.txt");
-//	  index.loadInvertedList();
+	  /* 14-Word Query File Generation */
+	  ComputeDice ncompute = new ComputeDice();
+	  ncompute.generateQuery("queryterms.txt",!compress);
+	  System.out.println("New 14 Word Query File Generated");
 	  
-	  //SelectTerms
-	  //ComputeDice
+	  /* Retrieval Time Computation*/
+	  ComputeQueryTime ntimer = new ComputeQueryTime();
+	  ntimer.computeTime("queryterms.txt", "diced-queries.txt", 5, !compress);	
 	  
-	  //Find scores
+	  
 	  
 	  
 	  

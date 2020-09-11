@@ -5,14 +5,12 @@ import java.util.*;
 
 import index.Posting;
 import index.PostingList;
-import index.InvertedIndex;
+
 
 public class ComputeDice {
 InvertedIndex index;
  public void generateQuery(String inputFile, boolean isCompressed) {
 	 try {
-
-		 
 		 index = new InvertedIndex(isCompressed);
 		 index.loadLookup();
 		 
@@ -32,11 +30,9 @@ InvertedIndex index;
 				 String bestTerm="";
 				 for(String term:vocabulary) {
 					 double dice = computeDiceCoeff(queryTerms[i],term);
-					 if(dice>best) {
-						 
+					 if(dice>best) { 
 						 best=dice;
-						 bestTerm = term;
-						
+						 bestTerm = term;					
 					 }
 				 }
 
@@ -72,22 +68,21 @@ InvertedIndex index;
 			 Integer [] aPos = a.getPositionsArray();
 			 Integer [] bPos = b.getPositionsArray();
 
-			 
 			 for(int aidx=0;aidx<aPos.length;aidx++) {
 				 for(int bidx =0;bidx<bPos.length;bidx++) {
 					 if(bPos[bidx].equals(aPos[aidx]+1)) {
-						 nAB++;
-						 
+						 nAB++;	 
 					 }
 				 }
 			 }
 	     }
 		 listA.skipTo(a.getDocId()+1);	 
 	 }
-//	 if(nAB>0) {
-//		 System.out.println("Nab: "+nAB +" Na+Nb: "+(nA+nB)+" coeff: "+nAB/(nA+nB));
-//		 System.out.println("--------------");
-//	 }
+	 /*
+	 if(nAB>0) {
+		 System.out.println("Nab: "+nAB +" Na+Nb: "+(nA+nB)+" coeff: "+nAB/(nA+nB));
+		 System.out.println("--------------");
+	 }*/
 	 
 	 return nAB/(nA+nB);
  }

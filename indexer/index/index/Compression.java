@@ -6,11 +6,39 @@ import java.util.ArrayList;
 public class Compression {
 	
 	
+	 public void VByteEncode(Integer[] inp, ByteBuffer byteBuffer){
+		 deltaEncode(inp);
+		    for(int i: inp){
+		      while(i>=128){
+		    	  byteBuffer.put((byte)(i&0x7F));
+		        i>>>=7;
+		      }
+		      byteBuffer.put((byte)(i|0x80));
+		    }
+		  }
+	 
+	  public void vByteDecode(byte[] compressed, IntBuffer decompressed){
+
+		  int i = 0;
+		    while(i<compressed.length){
+		      int position = 0;
+		      int result = ((int)compressed[i]&0x7F);
+		      while((compressed[i]&0x80) == 0){
+		        i++;
+		        position++;
+		        int unsigned_byte = ((int)compressed[i]&0x7F);
+		        result |= (unsigned_byte << (7*position));
+		      }
+		      i++;
+		      decompressed.put(result);
+		    }
+		    deltaDecode(decompressed);
+		  }
+	
 	/**
 	 * @param input: Posting list to be compressed
 	 * @param output: Storage for compressed list
 	 */
-	
 	public void deltaEncode(Integer[] inp) {
 		
 		int index = 0;
@@ -60,33 +88,6 @@ public class Compression {
 		}	
 	}
 	
-	 public void VByteEncode(Integer[] inp, ByteBuffer byteBuffer){
-		 deltaEncode(inp);
-		    for(int i: inp){
-		      while(i>=128){
-		    	  byteBuffer.put((byte)(i&0x7F));
-		        i>>>=7;
-		      }
-		      byteBuffer.put((byte)(i|0x80));
-		    }
-		  }
-	 
-	  public void vByteDecode(byte[] compressed, IntBuffer decompressed){
 
-		  int i = 0;
-		    while(i<compressed.length){
-		      int position = 0;
-		      int result = ((int)compressed[i]&0x7F);
-		      while((compressed[i]&0x80) == 0){
-		        i++;
-		        position++;
-		        int unsigned_byte = ((int)compressed[i]&0x7F);
-		        result |= (unsigned_byte << (7*position));
-		      }
-		      i++;
-		      decompressed.put(result);
-		    }
-		    deltaDecode(decompressed);
-		  }
 
 }

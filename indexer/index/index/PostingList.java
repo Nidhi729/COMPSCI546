@@ -81,12 +81,11 @@ public class PostingList {
 		postingsIndex=0;
 	}
 	public int termFreq() {
-		int freq=0;
+		int totFreq=0;
 		for(Posting p: postings) {
-			freq+=p.getTermFreq();
+			totFreq+=p.getTermFreq();
 		}
-		return freq;
-		//return postings.stream().mapToInt(p->p.getTermFreq()).sum();
+		return totFreq;
 	}
 	
 	public String toString() {
@@ -110,19 +109,5 @@ public class PostingList {
 		return buffer.toString();
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
 
 }

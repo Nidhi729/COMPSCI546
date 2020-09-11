@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.time.Duration;
 import java.time.Instant;
 
-import index.InvertedIndex;
 
 public class ComputeQueryTime {
 
@@ -36,7 +35,8 @@ public class ComputeQueryTime {
 
 	end = Instant.now();
 	reader.close();
-	System.out.println("seven word queries for compression = " + isCompressed+" took "+Duration.between(start,end));
+	System.out.println("Compression = "+isCompressed);
+	System.out.println("seven word queries took: "+Duration.between(start,end));
 	
 	inputFile = queryList7;
 	reader = new BufferedReader(new FileReader(inputFile));
@@ -51,7 +51,7 @@ public class ComputeQueryTime {
 	}
 	end = Instant.now();
 	reader.close();
-	System.out.println("fourteen word queries for compression = " + isCompressed+" took "+Duration.between(start, end));
+	System.out.println("fourteen word queries took "+Duration.between(start, end));
 	}catch(Exception ex) {
 	}
 
