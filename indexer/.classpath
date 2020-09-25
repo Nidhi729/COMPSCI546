@@ -6,8 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="index"/>
-	<classpathentry kind="src" path="retrieval"/>
-	<classpathentry kind="lib" path="C:/Users/Nidhi/Downloads/json-simple-1.1.1.jar/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nidhi/eclipse-workspace/indexer/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Nidhi/Downloads/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
